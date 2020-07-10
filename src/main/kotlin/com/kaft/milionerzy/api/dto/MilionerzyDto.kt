@@ -5,7 +5,7 @@ import com.kaft.milionerzy.domain.players.Player
 import java.util.*
 
 data class PlayerDto(val name: String) {
-    fun createEntity(): Player = Player(name)
+    fun createEntity(isAdmin: Boolean): Player = Player(name, isAdmin)
 }
 
 data class PlayerCreatedResponse(val playerName: String, val gameId: UUID, val gameStatus: GameStatus, val isAdmin: Boolean)
