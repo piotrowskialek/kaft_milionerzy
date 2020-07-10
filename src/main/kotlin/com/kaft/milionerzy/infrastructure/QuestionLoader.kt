@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.ClassPathResource
 import java.io.File
-import javax.annotation.PostConstruct
 
 
 @Configuration
@@ -22,7 +21,7 @@ class QuestionConfiguration(val questionRepository: QuestionRepository) {
 
     fun <T> loadObjectList(type: Class<T>, fileName: String): List<T> {
         return try {
-            val bootstrapSchema: CsvSchema = CsvSchema.emptySchema().withColumnSeparator(';')
+            val bootstrapSchema: CsvSchema = CsvSchema.emptySchema().withColumnSeparator(';').withoutQuoteChar()
             val mapper = CsvMapper()
             val file: File = ClassPathResource(fileName).file
             val readValues: MappingIterator<T> = mapper.reader(type).with(bootstrapSchema).readValues(file)
