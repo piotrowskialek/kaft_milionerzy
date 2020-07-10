@@ -1,8 +1,8 @@
 package com.kaft.milionerzy.infrastructure
 
-import com.fasterxml.jackson.databind.MappingIterator
 import com.fasterxml.jackson.dataformat.csv.CsvMapper
 import com.fasterxml.jackson.dataformat.csv.CsvSchema
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.kaft.milionerzy.domain.games.QuestionRepository
 import com.kaft.milionerzy.domain.questions.Question
 import org.springframework.context.annotation.Bean
@@ -16,19 +16,22 @@ class QuestionConfiguration(val questionRepository: QuestionRepository) {
 
     @Bean
     fun questionLoader() {
-        questionRepository.insert(loadObjectList(Question::class.java, "questions.csv"))
+        questionRepository.insert(loadObjectList())
     }
 
-    fun <T> loadObjectList(type: Class<T>, fileName: String): List<T> {
-        return try {
-            val bootstrapSchema: CsvSchema = CsvSchema.emptySchema().withColumnSeparator(';').withoutQuoteChar()
-            val mapper = CsvMapper()
-            val file: File = ClassPathResource(fileName).file
-            val readValues: MappingIterator<T> = mapper.reader(type).with(bootstrapSchema).readValues(file)
-            readValues.readAll()
-        } catch (e: Exception) {
-            emptyList()
-        }
+    fun loadObjectList(): List<Question> {
+            return try {
+                val bootstrapSchema: CsvSchema = CsvSchema.emptySchema().withColumnSeparator(';').withHeader()
+                val mapper = CsvMapper().registerModule(KotlinModule())
+                val file: File = ClassPathResource("questions.csv").file
+                mapper
+                        .readerFor(Question::class.java)
+                        .with(bootstrapSchema)
+                        .readValues<Question>(file)
+                        .readAll()
+            } catch (e: Exception) {
+                emptyList()
+            }
     }
 
 }
