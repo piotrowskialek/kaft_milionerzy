@@ -21,7 +21,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler
  class WebSocketConfig(val myHandler: WebSocketHandler) : WebSocketConfigurer {
 
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
-        registry.addHandler(myHandler, "/initGame");
+        registry.addHandler(myHandler, "/initGame").setAllowedOrigins("*")
     }
 
 }
