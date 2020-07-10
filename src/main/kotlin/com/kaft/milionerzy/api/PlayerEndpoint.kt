@@ -24,9 +24,13 @@ class PlayerEndpoint(val playerRepository: PlayerRepository, val gameRepository:
         gameRepository.findByGameStatus(GameStatus.ACTIVE).firstOrNull()?.let {
             throw GameIsActiveException("Game is already in ACTIVE state!")
         }
-        val player = playerRepository.insert(playerDto.createEntity())
-        return gameRepository.findByGameStatus(GameStatus.CREATED).firstOrNull()?.let { PlayerCreatedResponse(player.name, it.id, GameStatus.CREATED, false) }
-                ?: gameRepository.insert(Game(UUID.randomUUID(), GameStatus.CREATED)).let { PlayerCreatedResponse(player.name, it.id, GameStatus.CREATED, true) }
+        return gameRepository.findByGameStatus(GameStatus.CREATED).firstOrNull()?.let {
+            val player = playerRepository.insert(playerDto.createEntity(isAdmin = false))
+            PlayerCreatedResponse(player.name, it.id, GameStatus.CREATED, false)
+        } ?: gameRepository.insert(Game(UUID.randomUUID(), GameStatus.CREATED)).let {
+            val player = playerRepository.insert(playerDto.createEntity(isAdmin = true))
+            PlayerCreatedResponse(player.name, it.id, GameStatus.CREATED, true)
+        }
     }
 
     @GetMapping
@@ -34,7 +38,7 @@ class PlayerEndpoint(val playerRepository: PlayerRepository, val gameRepository:
 }
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-data class PlayerExistsException(val msg: String): RuntimeException(msg)
+data class PlayerExistsException(val msg: String) : RuntimeException(msg)
 
 @ResponseStatus(HttpStatus.FORBIDDEN)
-data class GameIsActiveException(val msg: String): RuntimeException(msg)
+data class GameIsActiveException(val msg: String) : RuntimeException(msg)
