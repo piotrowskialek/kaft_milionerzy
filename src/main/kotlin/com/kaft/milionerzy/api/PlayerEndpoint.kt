@@ -5,6 +5,7 @@ import com.kaft.milionerzy.api.dto.PlayerDto
 import com.kaft.milionerzy.domain.games.Game
 import com.kaft.milionerzy.domain.games.GameRepository
 import com.kaft.milionerzy.domain.games.GameStatus
+import com.kaft.milionerzy.domain.games.QuestionRepository
 import com.kaft.milionerzy.domain.players.Player
 import com.kaft.milionerzy.domain.players.PlayerRepository
 import org.springframework.http.HttpStatus
@@ -14,7 +15,7 @@ import java.util.*
 
 @RestController
 @RequestMapping("/players")
-class PlayerEndpoint(val playerRepository: PlayerRepository, val gameRepository: GameRepository) {
+class PlayerEndpoint(val playerRepository: PlayerRepository, val gameRepository: GameRepository, val questionRepository: QuestionRepository) {
 
     @PostMapping
     fun createPlayer(@RequestBody playerDto: PlayerDto): PlayerCreatedResponse {
