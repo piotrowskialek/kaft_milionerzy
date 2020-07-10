@@ -8,4 +8,4 @@ data class PlayerDto(val name: String) {
     fun createEntity(): Player = Player(name)
 }
 
-data class PlayerCreatedResponse(val gameId: UUID, val gameStatus: GameStatus, val isAdmin: Boolean)
+data class PlayerCreatedResponse(val playerName: String, val gameId: UUID, val gameStatus: GameStatus, val isAdmin: Boolean)

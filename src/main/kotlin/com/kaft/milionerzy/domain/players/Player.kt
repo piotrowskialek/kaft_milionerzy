@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 data class Player(
         @Id val name: String,
         val levelAchieved: Level = Level.FIRST,
-        val isPlaying: Boolean = false
+        val isPlaying: Boolean = true
 )
 
 enum class Level(val amount: Int, val isGuaranteed: Boolean) {

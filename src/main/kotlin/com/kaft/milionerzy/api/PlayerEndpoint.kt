@@ -5,6 +5,7 @@ import com.kaft.milionerzy.api.dto.PlayerDto
 import com.kaft.milionerzy.domain.games.Game
 import com.kaft.milionerzy.domain.games.GameRepository
 import com.kaft.milionerzy.domain.games.GameStatus
+import com.kaft.milionerzy.domain.players.Player
 import com.kaft.milionerzy.domain.players.PlayerRepository
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -23,10 +24,13 @@ class PlayerEndpoint(val playerRepository: PlayerRepository, val gameRepository:
         gameRepository.findByGameStatus(GameStatus.ACTIVE).firstOrNull()?.let {
             throw GameIsActiveException("Game is already in ACTIVE state!")
         }
-        playerRepository.insert(playerDto.createEntity())
-        return gameRepository.findByGameStatus(GameStatus.CREATED).firstOrNull()?.let { PlayerCreatedResponse(it.id, GameStatus.CREATED, false) }
-                ?: gameRepository.insert(Game(UUID.randomUUID(), GameStatus.CREATED)).let { PlayerCreatedResponse(it.id, GameStatus.CREATED, true) }
+        val player = playerRepository.insert(playerDto.createEntity())
+        return gameRepository.findByGameStatus(GameStatus.CREATED).firstOrNull()?.let { PlayerCreatedResponse(player.name, it.id, GameStatus.CREATED, false) }
+                ?: gameRepository.insert(Game(UUID.randomUUID(), GameStatus.CREATED)).let { PlayerCreatedResponse(player.name, it.id, GameStatus.CREATED, true) }
     }
+
+    @GetMapping
+    fun getActivePlayers(): List<Player> = playerRepository.getPlayersByPlayingIsTrue()
 }
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
