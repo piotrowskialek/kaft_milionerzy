@@ -34,7 +34,7 @@ class PlayerEndpoint(val playerRepository: PlayerRepository, val gameRepository:
     }
 
     @GetMapping
-    fun getActivePlayers(): List<Player> = playerRepository.getPlayersByPlayingIsTrue()
+    fun getActivePlayers(): List<Player> = playerRepository.getPlayersByIsPlayingIsTrue()
 }
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)

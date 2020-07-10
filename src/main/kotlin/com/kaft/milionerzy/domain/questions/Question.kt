@@ -6,15 +6,12 @@ import java.util.*
 
 @Document
 data class Question (
-        @Id val id: UUID,
         val content: String,
         val a: String,
         val b: String,
         val c: String,
         val d: String,
-        val rightAnswer: RightAnswerEnum,
-        val prize: Int,
-        val isGuaranteed: Boolean
+        val rightAnswer: RightAnswerEnum
 )
 
 enum class RightAnswerEnum {

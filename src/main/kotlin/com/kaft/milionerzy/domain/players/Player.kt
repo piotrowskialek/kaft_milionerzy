@@ -24,5 +24,5 @@ enum class Level(val amount: Int, val isGuaranteed: Boolean) {
     TENTH(125_000, false),
     ELEVENTH(250_000, false),
     TWELFTH(500_000, false),
-    THIRTEENTH(1_000_000, false)
+    THIRTEENTH(1_000_000, true)
 }

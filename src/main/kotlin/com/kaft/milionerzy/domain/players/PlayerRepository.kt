@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface PlayerRepository : MongoRepository<Player, String> {
-    fun getPlayersByPlayingIsTrue(): List<Player>
+    fun getPlayersByIsPlayingIsTrue(): List<Player>
 }
